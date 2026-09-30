@@ -156,12 +156,6 @@ input {
     border-radius: 12px;
 }
 
-.owner-link:hover {
-    opacity: 0.9;
-}
-
-/* PANEL WŁAŚCICIELA */
-
 .panel {
     display: none;
 }
@@ -171,10 +165,6 @@ input {
     border-radius: 18px;
     padding: 30px;
     box-shadow: 0 10px 35px rgba(0,0,0,0.08);
-}
-
-.panel-box h2 {
-    margin-top: 0;
 }
 
 .stats {
@@ -212,6 +202,21 @@ input {
     font-weight: bold;
 }
 
+.empty {
+    padding: 20px;
+    background: #f5f7fb;
+    border-radius: 12px;
+    color: #6b7280;
+}
+
+.clear {
+    margin-top: 20px;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
 </style>
 </head>
 
@@ -233,84 +238,65 @@ input {
 <div class="container">
 
 
-    <!-- STRONA KLIENTA -->
+<!-- STRONA KLIENTA -->
 
-    <div id="clientPage">
+<div id="clientPage">
 
-        <h1>
-            Porozmawiaj z Recepto
-        </h1>
+    <h1>
+        Porozmawiaj z Recepto
+    </h1>
 
-        <p class="subtitle">
-            Umów wizytę w kilka sekund.
-        </p>
-
-
-        <div class="chat">
-
-            <div
-                class="messages"
-                id="messages"
-            >
-
-                <div class="message bot">
-
-                    Dzień dobry! 👋
-
-                    <br><br>
-
-                    Jestem Recepto.
-
-                    <br><br>
-
-                    Mogę pomóc Ci umówić wizytę.
-                    Co chcesz zrobić?
-
-                </div>
+    <p class="subtitle">
+        Umów wizytę w kilka sekund.
+    </p>
 
 
-                <div class="options">
+    <div class="chat">
 
-                    <button
-                        class="option"
-                        onclick="chooseService('Fizjoterapia')"
-                    >
-                        Fizjoterapia
-                    </button>
+        <div
+            class="messages"
+            id="messages"
+        >
 
+            <div class="message bot">
 
-                    <button
-                        class="option"
-                        onclick="chooseService('Masaż')"
-                    >
-                        Masaż
-                    </button>
+                Dzień dobry! 👋
 
+                <br><br>
 
-                    <button
-                        class="option"
-                        onclick="chooseService('Konsultacja')"
-                    >
-                        Konsultacja
-                    </button>
+                Jestem Recepto.
 
-                </div>
+                <br><br>
+
+                Mogę pomóc Ci umówić wizytę.
+                Co chcesz zrobić?
 
             </div>
 
 
-            <div class="input-area">
-
-                <input
-                    id="input"
-                    placeholder="Napisz wiadomość..."
-                >
+            <div class="options">
 
                 <button
-                    class="send"
-                    onclick="sendMessage()"
+                    class="option"
+                    onclick="chooseService('Fizjoterapia')"
                 >
-                    Wyślij
+                    Fizjoterapia
+                </button>
+
+
+                <button
+                    class="option"
+                    onclick="chooseService('Masaż')"
+                >
+                    Masaż
+                </button>
+
+
+                <button
+                    class="option"
+                    onclick="chooseService('Konsultacja')"
+                >
+                    Konsultacja
                 </button>
 
             </div>
@@ -318,147 +304,129 @@ input {
         </div>
 
 
-        <a
-            href="#"
-            class="owner-link"
-            onclick="showPanel(); return false;"
-        >
-            🔐 Panel właściciela
-        </a>
+        <div class="input-area">
+
+            <input
+                id="input"
+                placeholder="Napisz wiadomość..."
+            >
+
+            <button
+                class="send"
+                onclick="sendMessage()"
+            >
+                Wyślij
+            </button>
+
+        </div>
 
     </div>
 
 
-    <!-- PANEL WŁAŚCICIELA -->
-
-    <div
-        id="ownerPage"
-        class="panel"
+    <a
+        href="#"
+        class="owner-link"
+        onclick="showPanel(); return false;"
     >
+        🔐 Panel właściciela
+    </a>
 
-        <div class="panel-box">
-
-            <div
-                class="back"
-                onclick="showClient()"
-            >
-                ← Wróć do Recepto
-            </div>
+</div>
 
 
-            <h1>
-                Panel właściciela
-            </h1>
+<!-- PANEL WŁAŚCICIELA -->
 
-            <p class="subtitle">
-                Centrum zarządzania gabinetem
-            </p>
+<div
+    id="ownerPage"
+    class="panel"
+>
+
+    <div class="panel-box">
+
+        <div
+            class="back"
+            onclick="showClient()"
+        >
+            ← Wróć do Recepto
+        </div>
 
 
-            <div class="stats">
+        <h1>
+            Panel właściciela
+        </h1>
 
-                <div class="stat">
+        <p class="subtitle">
+            Centrum zarządzania gabinetem
+        </p>
 
-                    <div>
-                        Dzisiejsze wizyty
-                    </div>
 
-                    <div
-                        class="stat-number"
-                        id="appointmentCount"
-                    >
-                        3
-                    </div>
+        <div class="stats">
 
+            <div class="stat">
+
+                <div>
+                    Dzisiejsze wizyty
                 </div>
 
-
-                <div class="stat">
-
-                    <div>
-                        Nowe zapytania
-                    </div>
-
-                    <div class="stat-number">
-                        5
-                    </div>
-
-                </div>
-
-
-                <div class="stat">
-
-                    <div>
-                        Status
-                    </div>
-
-                    <div class="stat-number">
-                        🟢
-                    </div>
-
+                <div
+                    class="stat-number"
+                    id="appointmentCount"
+                >
+                    0
                 </div>
 
             </div>
 
 
-            <h2>
-                Dzisiejsze wizyty
-            </h2>
+            <div class="stat">
 
+                <div>
+                    Wszystkie rezerwacje
+                </div>
 
-            <div class="appointment">
-
-                <strong>
-                    10:30 — Jan Kowalski
-                </strong>
-
-                <br>
-
-                Fizjoterapia
-
-                <br>
-
-                📞 500 600 700
+                <div
+                    class="stat-number"
+                    id="totalCount"
+                >
+                    0
+                </div>
 
             </div>
 
 
-            <div class="appointment">
+            <div class="stat">
 
-                <strong>
-                    12:00 — Anna Nowak
-                </strong>
+                <div>
+                    Status
+                </div>
 
-                <br>
-
-                Masaż
-
-                <br>
-
-                📞 501 234 567
-
-            </div>
-
-
-            <div class="appointment">
-
-                <strong>
-                    16:00 — Piotr Wiśniewski
-                </strong>
-
-                <br>
-
-                Konsultacja
-
-                <br>
-
-                📞 502 345 678
+                <div class="stat-number">
+                    🟢
+                </div>
 
             </div>
 
         </div>
 
+
+        <h2>
+            Rezerwacje
+        </h2>
+
+
+        <div id="appointments"></div>
+
+
+        <button
+            class="clear"
+            onclick="clearAppointments()"
+        >
+            Wyczyść testowe rezerwacje
+        </button>
+
     </div>
+
+</div>
 
 </div>
 
@@ -470,6 +438,25 @@ let selectedService = "";
 let selectedTime = "";
 
 let step = "service";
+
+
+function getAppointments() {
+
+    return JSON.parse(
+        localStorage.getItem("receptoAppointments") || "[]"
+    );
+
+}
+
+
+function saveAppointments(appointments) {
+
+    localStorage.setItem(
+        "receptoAppointments",
+        JSON.stringify(appointments)
+    );
+
+}
 
 
 function addMessage(text, type) {
@@ -490,6 +477,7 @@ function addMessage(text, type) {
 
     messages.scrollTop =
         messages.scrollHeight;
+
 }
 
 
@@ -503,6 +491,7 @@ function chooseService(service) {
         "user"
     );
 
+
     setTimeout(function() {
 
         addMessage(
@@ -513,6 +502,7 @@ function chooseService(service) {
         showTimes();
 
     }, 400);
+
 }
 
 
@@ -526,6 +516,7 @@ function showTimes() {
 
     options.className =
         "options";
+
 
     const times = [
 
@@ -558,6 +549,7 @@ function showTimes() {
 
             };
 
+
         options.appendChild(button);
 
     });
@@ -577,6 +569,7 @@ function chooseTime(time) {
         time,
         "user"
     );
+
 
     setTimeout(function() {
 
@@ -600,6 +593,7 @@ function sendMessage() {
     const text =
         input.value.trim();
 
+
     if (!text) return;
 
 
@@ -607,6 +601,7 @@ function sendMessage() {
         text,
         "user"
     );
+
 
     input.value = "";
 
@@ -633,11 +628,13 @@ function sendMessage() {
         window.userPhone =
             text;
 
+
         setTimeout(function() {
 
-            showConfirmation();
+            saveAppointment();
 
         }, 400);
+
 
         return;
 
@@ -648,6 +645,42 @@ function sendMessage() {
         "Wybierz proszę jedną z dostępnych usług.",
         "bot"
     );
+
+}
+
+
+function saveAppointment() {
+
+    const appointments =
+        getAppointments();
+
+
+    const newAppointment = {
+
+        id: Date.now(),
+
+        service: selectedService,
+
+        time: selectedTime,
+
+        name: window.userName,
+
+        phone: window.userPhone
+
+    };
+
+
+    appointments.push(
+        newAppointment
+    );
+
+
+    saveAppointments(
+        appointments
+    );
+
+
+    showConfirmation();
 
 }
 
@@ -693,7 +726,7 @@ function showConfirmation() {
         <br>
 
         <p>
-            To jest wersja demonstracyjna Recepto.
+            Rezerwacja została zapisana.
         </p>
 
     `;
@@ -718,6 +751,9 @@ function showPanel() {
         "ownerPage"
     ).style.display = "block";
 
+
+    renderAppointments();
+
 }
 
 
@@ -733,6 +769,112 @@ function showClient() {
     ).style.display = "block";
 
 }
+
+
+function renderAppointments() {
+
+    const appointments =
+        getAppointments();
+
+
+    const container =
+        document.getElementById(
+            "appointments"
+        );
+
+
+    const count =
+        document.getElementById(
+            "appointmentCount"
+        );
+
+
+    const total =
+        document.getElementById(
+            "totalCount"
+        );
+
+
+    count.innerText =
+        appointments.length;
+
+
+    total.innerText =
+        appointments.length;
+
+
+    container.innerHTML = "";
+
+
+    if (appointments.length === 0) {
+
+        container.innerHTML = `
+
+            <div class="empty">
+
+                Brak rezerwacji.
+
+                <br><br>
+
+                Gdy klient umówi wizytę,
+                pojawi się tutaj.
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    appointments
+        .slice()
+        .reverse()
+        .forEach(function(appointment) {
+
+            const item =
+                document.createElement("div");
+
+            item.className =
+                "appointment";
+
+
+            item.innerHTML = `
+
+                <strong>
+                    ${appointment.time} — ${appointment.name}
+                </strong>
+
+                <br>
+
+                ${appointment.service}
+
+                <br>
+
+                📞 ${appointment.phone}
+
+            `;
+
+
+            container.appendChild(item);
+
+        });
+
+}
+
+
+function clearAppointments() {
+
+    localStorage.removeItem(
+        "receptoAppointments"
+    );
+
+
+    renderAppointments();
+
+}
+
 
 </script>
 
