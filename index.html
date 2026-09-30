@@ -7,7 +7,6 @@
 <title>Recepto</title>
 
 <style>
-
 * {
     box-sizing: border-box;
 }
@@ -217,6 +216,14 @@ input {
     cursor: pointer;
 }
 
+.error {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #991b1b;
+    padding: 15px;
+    border-radius: 12px;
+    margin-top: 15px;
+}
 </style>
 </head>
 
@@ -234,9 +241,7 @@ input {
 
 </header>
 
-
 <div class="container">
-
 
 <!-- STRONA KLIENTA -->
 
@@ -249,7 +254,6 @@ input {
     <p class="subtitle">
         Umów wizytę w kilka sekund.
     </p>
-
 
     <div class="chat">
 
@@ -273,7 +277,6 @@ input {
 
             </div>
 
-
             <div class="options">
 
                 <button
@@ -283,14 +286,12 @@ input {
                     Fizjoterapia
                 </button>
 
-
                 <button
                     class="option"
                     onclick="chooseService('Masaż')"
                 >
                     Masaż
                 </button>
-
 
                 <button
                     class="option"
@@ -302,7 +303,6 @@ input {
             </div>
 
         </div>
-
 
         <div class="input-area">
 
@@ -322,7 +322,6 @@ input {
 
     </div>
 
-
     <a
         href="#"
         class="owner-link"
@@ -332,7 +331,6 @@ input {
     </a>
 
 </div>
-
 
 <!-- PANEL WŁAŚCICIELA -->
 
@@ -350,7 +348,6 @@ input {
             ← Wróć do Recepto
         </div>
 
-
         <h1>
             Panel właściciela
         </h1>
@@ -358,7 +355,6 @@ input {
         <p class="subtitle">
             Centrum zarządzania gabinetem
         </p>
-
 
         <div class="stats">
 
@@ -377,7 +373,6 @@ input {
 
             </div>
 
-
             <div class="stat">
 
                 <div>
@@ -393,7 +388,6 @@ input {
 
             </div>
 
-
             <div class="stat">
 
                 <div>
@@ -408,14 +402,11 @@ input {
 
         </div>
 
-
         <h2>
             Rezerwacje
         </h2>
 
-
         <div id="appointments"></div>
-
 
         <button
             class="clear"
@@ -430,42 +421,106 @@ input {
 
 </div>
 
-
 <script>
 
+/* ================================
+   USTAWIENIA SUPABASE
+================================ */
+
+const SUPABASE_URL =
+    "https://pgzsgqjdrgckaghcgrsz.supabase.co";
+
+const SUPABASE_KEY =
+    "WKLEJ_TUTAJ_SWÓJ_PUBLISHABLE_KEY";
+
+
 let selectedService = "";
-
 let selectedTime = "";
-
 let step = "service";
 
 
-function getAppointments() {
+/* ================================
+   POŁĄCZENIE Z SUPABASE
+================================ */
 
-    return JSON.parse(
-        localStorage.getItem("receptoAppointments") || "[]"
-    );
+async function supabaseRequest(
+    method,
+    body = null
+) {
+
+    const options = {
+
+        method: method,
+
+        headers: {
+
+            "apikey": SUPABASE_KEY,
+
+            "Authorization":
+                "Bearer " + SUPABASE_KEY,
+
+            "Content-Type":
+                "application/json",
+
+            "Prefer":
+                "return=representation"
+
+        }
+
+    };
+
+
+    if (body !== null) {
+
+        options.body =
+            JSON.stringify(body);
+
+    }
+
+
+    const response =
+        await fetch(
+            SUPABASE_URL +
+            "/rest/v1/appointments",
+            options
+        );
+
+
+    if (!response.ok) {
+
+        const errorText =
+            await response.text();
+
+        throw new Error(
+            errorText
+        );
+
+    }
+
+
+    return response.json();
 
 }
 
 
-function saveAppointments(appointments) {
+/* ================================
+   WIADOMOŚCI
+================================ */
 
-    localStorage.setItem(
-        "receptoAppointments",
-        JSON.stringify(appointments)
-    );
-
-}
-
-
-function addMessage(text, type) {
+function addMessage(
+    text,
+    type
+) {
 
     const messages =
-        document.getElementById("messages");
+        document.getElementById(
+            "messages"
+        );
 
     const message =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
     message.className =
         "message " + type;
@@ -473,7 +528,9 @@ function addMessage(text, type) {
     message.innerText =
         text;
 
-    messages.appendChild(message);
+    messages.appendChild(
+        message
+    );
 
     messages.scrollTop =
         messages.scrollHeight;
@@ -481,7 +538,13 @@ function addMessage(text, type) {
 }
 
 
-function chooseService(service) {
+/* ================================
+   WYBÓR USŁUGI
+================================ */
+
+function chooseService(
+    service
+) {
 
     selectedService =
         service;
@@ -492,27 +555,38 @@ function chooseService(service) {
     );
 
 
-    setTimeout(function() {
+    setTimeout(
+        function() {
 
-        addMessage(
-            "Świetnie! 😊 Wybierz dogodny termin:",
-            "bot"
-        );
+            addMessage(
+                "Świetnie! 😊 Wybierz dogodny termin:",
+                "bot"
+            );
 
-        showTimes();
+            showTimes();
 
-    }, 400);
+        },
+        400
+    );
 
 }
 
 
+/* ================================
+   TERMINY
+================================ */
+
 function showTimes() {
 
     const messages =
-        document.getElementById("messages");
+        document.getElementById(
+            "messages"
+        );
 
     const options =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
     options.className =
         "options";
@@ -531,36 +605,52 @@ function showTimes() {
     ];
 
 
-    times.forEach(function(time) {
+    times.forEach(
+        function(time) {
 
-        const button =
-            document.createElement("button");
+            const button =
+                document.createElement(
+                    "button"
+                );
 
-        button.className =
-            "option";
+            button.className =
+                "option";
 
-        button.innerText =
-            time;
+            button.innerText =
+                time;
 
-        button.onclick =
-            function() {
+            button.onclick =
+                function() {
 
-                chooseTime(time);
+                    chooseTime(
+                        time
+                    );
 
-            };
-
-
-        options.appendChild(button);
-
-    });
+                };
 
 
-    messages.appendChild(options);
+            options.appendChild(
+                button
+            );
+
+        }
+    );
+
+
+    messages.appendChild(
+        options
+    );
 
 }
 
 
-function chooseTime(time) {
+/* ================================
+   WYBÓR TERMINU
+================================ */
+
+function chooseTime(
+    time
+) {
 
     selectedTime =
         time;
@@ -571,24 +661,33 @@ function chooseTime(time) {
     );
 
 
-    setTimeout(function() {
+    setTimeout(
+        function() {
 
-        addMessage(
-            "Super! 👍 Podaj proszę swoje imię.",
-            "bot"
-        );
+            addMessage(
+                "Super! 👍 Podaj proszę swoje imię.",
+                "bot"
+            );
 
-        step = "name";
+            step = "name";
 
-    }, 400);
+        },
+        400
+    );
 
 }
 
 
+/* ================================
+   WYSYŁANIE WIADOMOŚCI
+================================ */
+
 function sendMessage() {
 
     const input =
-        document.getElementById("input");
+        document.getElementById(
+            "input"
+        );
 
     const text =
         input.value.trim();
@@ -628,13 +727,7 @@ function sendMessage() {
         window.userPhone =
             text;
 
-
-        setTimeout(function() {
-
-            saveAppointment();
-
-        }, 400);
-
+        saveAppointment();
 
         return;
 
@@ -649,49 +742,67 @@ function sendMessage() {
 }
 
 
-function saveAppointment() {
+/* ================================
+   ZAPIS REZERWACJI
+================================ */
 
-    const appointments =
-        getAppointments();
+async function saveAppointment() {
 
+    try {
 
-    const newAppointment = {
+        await supabaseRequest(
+            "POST",
+            {
 
-        id: Date.now(),
+                service:
+                    selectedService,
 
-        service: selectedService,
+                time:
+                    selectedTime,
 
-        time: selectedTime,
+                name:
+                    window.userName,
 
-        name: window.userName,
+                phone:
+                    window.userPhone
 
-        phone: window.userPhone
-
-    };
-
-
-    appointments.push(
-        newAppointment
-    );
-
-
-    saveAppointments(
-        appointments
-    );
+            }
+        );
 
 
-    showConfirmation();
+        showConfirmation();
+
+
+    } catch (error) {
+
+        console.error(
+            error
+        );
+
+        showError(
+            "Nie udało się zapisać rezerwacji. Sprawdź ustawienia Supabase."
+        );
+
+    }
 
 }
 
 
+/* ================================
+   POTWIERDZENIE
+================================ */
+
 function showConfirmation() {
 
     const messages =
-        document.getElementById("messages");
+        document.getElementById(
+            "messages"
+        );
 
     const box =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
     box.className =
         "confirmation";
@@ -726,13 +837,15 @@ function showConfirmation() {
         <br>
 
         <p>
-            Rezerwacja została zapisana.
+            Rezerwacja została zapisana w bazie Recepto.
         </p>
 
     `;
 
 
-    messages.appendChild(box);
+    messages.appendChild(
+        box
+    );
 
     messages.scrollTop =
         messages.scrollHeight;
@@ -740,16 +853,49 @@ function showConfirmation() {
 }
 
 
+function showError(
+    text
+) {
+
+    const messages =
+        document.getElementById(
+            "messages"
+        );
+
+    const box =
+        document.createElement(
+            "div"
+        );
+
+    box.className =
+        "error";
+
+    box.innerText =
+        text;
+
+    messages.appendChild(
+        box
+    );
+
+}
+
+
+/* ================================
+   PANEL WŁAŚCICIELA
+================================ */
+
 function showPanel() {
 
     document.getElementById(
         "clientPage"
-    ).style.display = "none";
+    ).style.display =
+        "none";
 
 
     document.getElementById(
         "ownerPage"
-    ).style.display = "block";
+    ).style.display =
+        "block";
 
 
     renderAppointments();
@@ -761,33 +907,33 @@ function showClient() {
 
     document.getElementById(
         "ownerPage"
-    ).style.display = "none";
+    ).style.display =
+        "none";
 
 
     document.getElementById(
         "clientPage"
-    ).style.display = "block";
+    ).style.display =
+        "block";
 
 }
 
 
-function renderAppointments() {
+/* ================================
+   POBIERANIE REZERWACJI
+================================ */
 
-    const appointments =
-        getAppointments();
-
+async function renderAppointments() {
 
     const container =
         document.getElementById(
             "appointments"
         );
 
-
     const count =
         document.getElementById(
             "appointmentCount"
         );
-
 
     const total =
         document.getElementById(
@@ -795,86 +941,194 @@ function renderAppointments() {
         );
 
 
-    count.innerText =
-        appointments.length;
+    container.innerHTML =
+        "Ładowanie rezerwacji...";
 
 
-    total.innerText =
-        appointments.length;
+    try {
+
+        const appointments =
+            await supabaseRequest(
+                "GET"
+            );
 
 
-    container.innerHTML = "";
+        count.innerText =
+            appointments.length;
 
 
-    if (appointments.length === 0) {
+        total.innerText =
+            appointments.length;
+
+
+        container.innerHTML =
+            "";
+
+
+        if (
+            appointments.length === 0
+        ) {
+
+            container.innerHTML = `
+
+                <div class="empty">
+
+                    Brak rezerwacji.
+
+                    <br><br>
+
+                    Gdy klient umówi wizytę,
+                    pojawi się tutaj.
+
+                </div>
+
+            `;
+
+            return;
+
+        }
+
+
+        appointments
+            .slice()
+            .reverse()
+            .forEach(
+                function(
+                    appointment
+                ) {
+
+                    const item =
+                        document.createElement(
+                            "div"
+                        );
+
+                    item.className =
+                        "appointment";
+
+
+                    item.innerHTML = `
+
+                        <strong>
+                            ${appointment.time} — ${appointment.name}
+                        </strong>
+
+                        <br>
+
+                        ${appointment.service}
+
+                        <br>
+
+                        📞 ${appointment.phone}
+
+                    `;
+
+
+                    container.appendChild(
+                        item
+                    );
+
+                }
+            );
+
+
+    } catch (error) {
+
+        console.error(
+            error
+        );
+
 
         container.innerHTML = `
 
-            <div class="empty">
+            <div class="error">
 
-                Brak rezerwacji.
+                Nie udało się pobrać rezerwacji.
 
                 <br><br>
 
-                Gdy klient umówi wizytę,
-                pojawi się tutaj.
+                Sprawdź ustawienia Supabase.
 
             </div>
 
         `;
+
+    }
+
+}
+
+
+/* ================================
+   USUWANIE REZERWACJI TESTOWYCH
+================================ */
+
+async function clearAppointments() {
+
+    if (
+        !confirm(
+            "Czy na pewno chcesz usunąć wszystkie rezerwacje?"
+        )
+    ) {
 
         return;
 
     }
 
 
-    appointments
-        .slice()
-        .reverse()
-        .forEach(function(appointment) {
+    try {
 
-            const item =
-                document.createElement("div");
-
-            item.className =
-                "appointment";
+        const appointments =
+            await supabaseRequest(
+                "GET"
+            );
 
 
-            item.innerHTML = `
+        for (
+            const appointment
+            of appointments
+        ) {
 
-                <strong>
-                    ${appointment.time} — ${appointment.name}
-                </strong>
+            await fetch(
+                SUPABASE_URL +
+                "/rest/v1/appointments?id=eq." +
+                appointment.id,
+                {
 
-                <br>
+                    method:
+                        "DELETE",
 
-                ${appointment.service}
+                    headers: {
 
-                <br>
+                        "apikey":
+                            SUPABASE_KEY,
 
-                📞 ${appointment.phone}
+                        "Authorization":
+                            "Bearer " +
+                            SUPABASE_KEY
 
-            `;
+                    }
+
+                }
+            );
+
+        }
 
 
-            container.appendChild(item);
+        renderAppointments();
 
-        });
+
+    } catch (error) {
+
+        console.error(
+            error
+        );
+
+        alert(
+            "Nie udało się wyczyścić rezerwacji."
+        );
+
+    }
 
 }
-
-
-function clearAppointments() {
-
-    localStorage.removeItem(
-        "receptoAppointments"
-    );
-
-
-    renderAppointments();
-
-}
-
 
 </script>
 
