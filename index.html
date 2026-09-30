@@ -3,9 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Recepto</title>
 
 <style>
+
 * {
     box-sizing: border-box;
 }
@@ -44,7 +46,7 @@ header {
 
 h1 {
     text-align: center;
-    font-size: 42px;
+    font-size: 40px;
     margin-bottom: 10px;
 }
 
@@ -140,71 +142,319 @@ input {
 
 .confirmation h3 {
     color: #15803d;
-    margin-bottom: 10px;
 }
+
+.owner-link {
+    display: block;
+    width: 220px;
+    margin: 30px auto 0;
+    padding: 14px;
+    text-align: center;
+    background: #111827;
+    color: white;
+    text-decoration: none;
+    border-radius: 12px;
+}
+
+.owner-link:hover {
+    opacity: 0.9;
+}
+
+/* PANEL WŁAŚCICIELA */
+
+.panel {
+    display: none;
+}
+
+.panel-box {
+    background: white;
+    border-radius: 18px;
+    padding: 30px;
+    box-shadow: 0 10px 35px rgba(0,0,0,0.08);
+}
+
+.panel-box h2 {
+    margin-top: 0;
+}
+
+.stats {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin: 25px 0;
+}
+
+.stat {
+    flex: 1;
+    min-width: 180px;
+    background: #f5f7fb;
+    padding: 20px;
+    border-radius: 14px;
+}
+
+.stat-number {
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.appointment {
+    border: 1px solid #e5e7eb;
+    padding: 18px;
+    border-radius: 12px;
+    margin-bottom: 12px;
+}
+
+.back {
+    display: inline-block;
+    margin-bottom: 20px;
+    cursor: pointer;
+    color: #5b5ce2;
+    font-weight: bold;
+}
+
 </style>
 </head>
 
 <body>
 
 <header>
-    <div class="logo">Recepto</div>
+
+    <div class="logo">
+        Recepto
+    </div>
 
     <div class="status">
         ● Recepcjonista online
     </div>
+
 </header>
+
 
 <div class="container">
 
-    <h1>Porozmawiaj z Recepto</h1>
 
-    <p class="subtitle">
-        Umów wizytę w kilka sekund.
-    </p>
+    <!-- STRONA KLIENTA -->
 
-    <div class="chat">
+    <div id="clientPage">
 
-        <div class="messages" id="messages">
+        <h1>
+            Porozmawiaj z Recepto
+        </h1>
 
-            <div class="message bot">
-                Dzień dobry! 👋<br><br>
-                Jestem Recepto.<br><br>
-                Mogę pomóc Ci umówić wizytę.
-                Co chcesz zrobić?
+        <p class="subtitle">
+            Umów wizytę w kilka sekund.
+        </p>
+
+
+        <div class="chat">
+
+            <div
+                class="messages"
+                id="messages"
+            >
+
+                <div class="message bot">
+
+                    Dzień dobry! 👋
+
+                    <br><br>
+
+                    Jestem Recepto.
+
+                    <br><br>
+
+                    Mogę pomóc Ci umówić wizytę.
+                    Co chcesz zrobić?
+
+                </div>
+
+
+                <div class="options">
+
+                    <button
+                        class="option"
+                        onclick="chooseService('Fizjoterapia')"
+                    >
+                        Fizjoterapia
+                    </button>
+
+
+                    <button
+                        class="option"
+                        onclick="chooseService('Masaż')"
+                    >
+                        Masaż
+                    </button>
+
+
+                    <button
+                        class="option"
+                        onclick="chooseService('Konsultacja')"
+                    >
+                        Konsultacja
+                    </button>
+
+                </div>
+
             </div>
 
-            <div class="options">
 
-                <button class="option"
-                    onclick="chooseService('Fizjoterapia')">
-                    Fizjoterapia
-                </button>
+            <div class="input-area">
 
-                <button class="option"
-                    onclick="chooseService('Masaż')">
-                    Masaż
-                </button>
+                <input
+                    id="input"
+                    placeholder="Napisz wiadomość..."
+                >
 
-                <button class="option"
-                    onclick="chooseService('Konsultacja')">
-                    Konsultacja
+                <button
+                    class="send"
+                    onclick="sendMessage()"
+                >
+                    Wyślij
                 </button>
 
             </div>
 
         </div>
 
-        <div class="input-area">
 
-            <input
-                id="input"
-                placeholder="Napisz wiadomość..."
+        <a
+            href="#"
+            class="owner-link"
+            onclick="showPanel(); return false;"
+        >
+            🔐 Panel właściciela
+        </a>
+
+    </div>
+
+
+    <!-- PANEL WŁAŚCICIELA -->
+
+    <div
+        id="ownerPage"
+        class="panel"
+    >
+
+        <div class="panel-box">
+
+            <div
+                class="back"
+                onclick="showClient()"
             >
+                ← Wróć do Recepto
+            </div>
 
-            <button class="send" onclick="sendMessage()">
-                Wyślij
-            </button>
+
+            <h1>
+                Panel właściciela
+            </h1>
+
+            <p class="subtitle">
+                Centrum zarządzania gabinetem
+            </p>
+
+
+            <div class="stats">
+
+                <div class="stat">
+
+                    <div>
+                        Dzisiejsze wizyty
+                    </div>
+
+                    <div
+                        class="stat-number"
+                        id="appointmentCount"
+                    >
+                        3
+                    </div>
+
+                </div>
+
+
+                <div class="stat">
+
+                    <div>
+                        Nowe zapytania
+                    </div>
+
+                    <div class="stat-number">
+                        5
+                    </div>
+
+                </div>
+
+
+                <div class="stat">
+
+                    <div>
+                        Status
+                    </div>
+
+                    <div class="stat-number">
+                        🟢
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <h2>
+                Dzisiejsze wizyty
+            </h2>
+
+
+            <div class="appointment">
+
+                <strong>
+                    10:30 — Jan Kowalski
+                </strong>
+
+                <br>
+
+                Fizjoterapia
+
+                <br>
+
+                📞 500 600 700
+
+            </div>
+
+
+            <div class="appointment">
+
+                <strong>
+                    12:00 — Anna Nowak
+                </strong>
+
+                <br>
+
+                Masaż
+
+                <br>
+
+                📞 501 234 567
+
+            </div>
+
+
+            <div class="appointment">
+
+                <strong>
+                    16:00 — Piotr Wiśniewski
+                </strong>
+
+                <br>
+
+                Konsultacja
+
+                <br>
+
+                📞 502 345 678
+
+            </div>
 
         </div>
 
@@ -212,32 +462,46 @@ input {
 
 </div>
 
+
 <script>
 
 let selectedService = "";
+
 let selectedTime = "";
+
 let step = "service";
+
 
 function addMessage(text, type) {
 
-    const messages = document.getElementById("messages");
+    const messages =
+        document.getElementById("messages");
 
-    const message = document.createElement("div");
+    const message =
+        document.createElement("div");
 
-    message.className = "message " + type;
+    message.className =
+        "message " + type;
 
-    message.innerText = text;
+    message.innerText =
+        text;
 
     messages.appendChild(message);
 
-    messages.scrollTop = messages.scrollHeight;
+    messages.scrollTop =
+        messages.scrollHeight;
 }
+
 
 function chooseService(service) {
 
-    selectedService = service;
+    selectedService =
+        service;
 
-    addMessage(service, "user");
+    addMessage(
+        service,
+        "user"
+    );
 
     setTimeout(function() {
 
@@ -248,47 +512,71 @@ function chooseService(service) {
 
         showTimes();
 
-    }, 500);
+    }, 400);
 }
+
 
 function showTimes() {
 
-    const messages = document.getElementById("messages");
+    const messages =
+        document.getElementById("messages");
 
-    const options = document.createElement("div");
+    const options =
+        document.createElement("div");
 
-    options.className = "options";
+    options.className =
+        "options";
 
     const times = [
+
         "Poniedziałek 14:00",
+
         "Wtorek 10:30",
+
         "Środa 16:00",
+
         "Czwartek 12:00"
+
     ];
+
 
     times.forEach(function(time) {
 
-        const button = document.createElement("button");
+        const button =
+            document.createElement("button");
 
-        button.className = "option";
+        button.className =
+            "option";
 
-        button.innerText = time;
+        button.innerText =
+            time;
 
-        button.onclick = function() {
-            chooseTime(time);
-        };
+        button.onclick =
+            function() {
+
+                chooseTime(time);
+
+            };
 
         options.appendChild(button);
+
     });
 
+
     messages.appendChild(options);
+
 }
+
 
 function chooseTime(time) {
 
-    selectedTime = time;
+    selectedTime =
+        time;
 
-    addMessage(time, "user");
+    addMessage(
+        time,
+        "user"
+    );
 
     setTimeout(function() {
 
@@ -299,24 +587,34 @@ function chooseTime(time) {
 
         step = "name";
 
-    }, 500);
+    }, 400);
+
 }
+
 
 function sendMessage() {
 
-    const input = document.getElementById("input");
+    const input =
+        document.getElementById("input");
 
-    const text = input.value.trim();
+    const text =
+        input.value.trim();
 
     if (!text) return;
 
-    addMessage(text, "user");
+
+    addMessage(
+        text,
+        "user"
+    );
 
     input.value = "";
 
+
     if (step === "name") {
 
-        window.userName = text;
+        window.userName =
+            text;
 
         addMessage(
             "Dzięki! Teraz podaj numer telefonu.",
@@ -326,35 +624,51 @@ function sendMessage() {
         step = "phone";
 
         return;
+
     }
+
 
     if (step === "phone") {
 
-        window.userPhone = text;
+        window.userPhone =
+            text;
 
         setTimeout(function() {
+
             showConfirmation();
-        }, 500);
+
+        }, 400);
 
         return;
+
     }
 
+
     addMessage(
-        "Wybierz proszę jedną z dostępnych usług powyżej.",
+        "Wybierz proszę jedną z dostępnych usług.",
         "bot"
     );
+
 }
+
 
 function showConfirmation() {
 
-    const messages = document.getElementById("messages");
+    const messages =
+        document.getElementById("messages");
 
-    const box = document.createElement("div");
+    const box =
+        document.createElement("div");
 
-    box.className = "confirmation";
+    box.className =
+        "confirmation";
+
 
     box.innerHTML = `
-        <h3>✅ Wizyta zarezerwowana!</h3>
+
+        <h3>
+            ✅ Wizyta zarezerwowana!
+        </h3>
 
         <p>
             <strong>Usługa:</strong>
@@ -381,11 +695,43 @@ function showConfirmation() {
         <p>
             To jest wersja demonstracyjna Recepto.
         </p>
+
     `;
+
 
     messages.appendChild(box);
 
-    messages.scrollTop = messages.scrollHeight;
+    messages.scrollTop =
+        messages.scrollHeight;
+
+}
+
+
+function showPanel() {
+
+    document.getElementById(
+        "clientPage"
+    ).style.display = "none";
+
+
+    document.getElementById(
+        "ownerPage"
+    ).style.display = "block";
+
+}
+
+
+function showClient() {
+
+    document.getElementById(
+        "ownerPage"
+    ).style.display = "none";
+
+
+    document.getElementById(
+        "clientPage"
+    ).style.display = "block";
+
 }
 
 </script>
