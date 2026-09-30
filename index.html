@@ -1,4 +1,236 @@
- 
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recepto — AI recepcjonista</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f7fb;
+            color: #111827;
+        }
+
+        header {
+            background: white;
+            padding: 20px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .status {
+            color: #16a34a;
+            font-size: 14px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 42px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #6b7280;
+            margin-bottom: 35px;
+        }
+
+        .chat {
+            background: white;
+            border-radius: 18px;
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+
+        .messages {
+            height: 450px;
+            padding: 25px;
+            overflow-y: auto;
+        }
+
+        .message {
+            max-width: 75%;
+            padding: 14px 17px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .bot {
+            background: #f0f1ff;
+            margin-right: auto;
+        }
+
+        .user {
+            background: #5b5ce2;
+            color: white;
+            margin-left: auto;
+        }
+
+        .input-area {
+            display: flex;
+            padding: 15px;
+            border-top: 1px solid #e5e7eb;
+            gap: 10px;
+        }
+
+        input {
+            flex: 1;
+            border: 1px solid #d1d5db;
+            border-radius: 12px;
+            padding: 15px;
+            font-size: 16px;
+            outline: none;
+        }
+
+        button {
+            background: #5b5ce2;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 0 25px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #4748c7;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">Recepto</div>
+    <div class="status">● AI recepcjonista online</div>
+</header>
+
+<div class="container">
+
+    <h1>Porozmawiaj z Recepto</h1>
+
+    <p class="subtitle">
+        Twój cyfrowy recepcjonista jest dostępny 24/7.
+    </p>
+
+    <div class="chat">
+
+        <div class="messages" id="messages">
+
+            <div class="message bot">
+                Dzień dobry! 👋 Jestem Recepto, wirtualnym
+                recepcjonistą. W czym mogę Ci pomóc?
+            </div>
+
+        </div>
+
+        <div class="input-area">
+
+            <input
+                id="userInput"
+                type="text"
+                placeholder="Napisz wiadomość..."
+                onkeydown="handleKey(event)"
+            >
+
+            <button onclick="sendMessage()">
+                Wyślij
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+function addMessage(text, type) {
+
+    const messages = document.getElementById("messages");
+
+    const message = document.createElement("div");
+
+    message.className = "message " + type;
+
+    message.textContent = text;
+
+    messages.appendChild(message);
+
+    messages.scrollTop = messages.scrollHeight;
+}
+
+
+function sendMessage() {
+
+    const input = document.getElementById("userInput");
+
+    const text = input.value.trim();
+
+    if (!text) return;
+
+    addMessage(text, "user");
+
+    input.value = "";
+
+    setTimeout(function() {
+
+        let response =
+            "Jasne! Chętnie Ci pomogę. 😊 " +
+            "Na tym etapie jestem wersją demonstracyjną.";
+
+        const lower = text.toLowerCase();
+
+        if (
+            lower.includes("termin") ||
+            lower.includes("wizyta") ||
+            lower.includes("umówi")
+        ) {
+
+            response =
+                "Oczywiście! 📅 Mogę pomóc umówić wizytę. " +
+                "Wybierz proszę dzień, który Ci odpowiada.";
+
+        } else if (
+            lower.includes("cena") ||
+            lower.includes("koszt")
+        ) {
+
+            response =
+                "Pierwsza konsultacja kosztuje 200 zł. " +
+                "Czy chcesz sprawdzić dostępne terminy?";
+
+        } else if (
+            lower.includes("hej") ||
+            lower.includes("cześć") ||
+            lower.includes("witam")
+        ) {
+
+            response =
+                "Cześć! 👋 Miło Cię widzieć. " +
+                "W czym mogę Ci dzisiaj pomóc?";
+
         }
 
         addMessage(response, "bot");
