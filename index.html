@@ -4,38 +4,205 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Recepto</title>
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #f4f7fb;
+  padding: 20px;
+}
+
+.box {
+  max-width: 600px;
+  margin: 30px auto;
+  background: white;
+  padding: 25px;
+  border-radius: 15px;
+}
+
+button {
+  padding: 12px 18px;
+  margin: 5px;
+  border: 0;
+  border-radius: 8px;
+  background: #2563eb;
+  color: white;
+  cursor: pointer;
+}
+
+input {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.hidden {
+  display: none;
+}
+
+.success {
+  background: #e8f7ee;
+  padding: 15px;
+  border-radius: 10px;
+}
+</style>
 </head>
 
 <body>
 
+<div class="box">
+
 <h1>Porozmawiaj z Recepto 🤖</h1>
 
-<p>Twój cyfrowy recepcjonista jest dostępny 24/7.</p>
+<p>
+Twój cyfrowy recepcjonista jest dostępny 24/7.
+</p>
 
 <h3>Wybierz usługę:</h3>
 
-<button id="fizjo">Fizjoterapia</button>
-<button id="masaz">Masaż</button>
-<button id="konsultacja">Konsultacja</button>
+<button onclick="wybierzUsluge('Fizjoterapia')">
+Fizjoterapia
+</button>
+
+<button onclick="wybierzUsluge('Masaż')">
+Masaż
+</button>
+
+<button onclick="wybierzUsluge('Konsultacja')">
+Konsultacja
+</button>
+
+
+<div id="terminy" class="hidden">
+
+<h3>Wybierz termin:</h3>
+
+<button onclick="wybierzTermin('Poniedziałek 14:00')">
+Poniedziałek 14:00
+</button>
+
+<button onclick="wybierzTermin('Wtorek 10:30')">
+Wtorek 10:30
+</button>
+
+<button onclick="wybierzTermin('Środa 16:00')">
+Środa 16:00
+</button>
+
+<button onclick="wybierzTermin('Czwartek 12:00')">
+Czwartek 12:00
+</button>
+
+</div>
+
+
+<div id="formularz" class="hidden">
+
+<h3>Podaj swoje dane:</h3>
+
+<input
+id="imie"
+type="text"
+placeholder="Imię i nazwisko"
+>
+
+<input
+id="telefon"
+type="text"
+placeholder="Numer telefonu"
+>
+
+<button onclick="zarezerwuj()">
+Zarezerwuj wizytę
+</button>
+
+</div>
+
 
 <div id="wynik"></div>
 
+</div>
+
+
 <script>
 
-document.getElementById("fizjo").onclick = function() {
-  document.getElementById("wynik").innerHTML =
-    "<h3>Wybrałeś Fizjoterapię ✅</h3>";
-};
+let wybranaUsluga = "";
+let wybranyTermin = "";
 
-document.getElementById("masaz").onclick = function() {
-  document.getElementById("wynik").innerHTML =
-    "<h3>Wybrałeś Masaż ✅</h3>";
-};
 
-document.getElementById("konsultacja").onclick = function() {
-  document.getElementById("wynik").innerHTML =
-    "<h3>Wybrałeś Konsultację ✅</h3>";
-};
+function wybierzUsluge(usluga) {
+
+wybranaUsluga = usluga;
+
+document.getElementById("terminy")
+.classList.remove("hidden");
+
+}
+
+
+function wybierzTermin(termin) {
+
+wybranyTermin = termin;
+
+document.getElementById("formularz")
+.classList.remove("hidden");
+
+}
+
+
+function zarezerwuj() {
+
+let imie =
+document.getElementById("imie").value;
+
+let telefon =
+document.getElementById("telefon").value;
+
+
+if (imie === "" || telefon === "") {
+
+alert("Podaj imię i numer telefonu.");
+
+return;
+
+}
+
+
+document.getElementById("wynik").innerHTML = `
+
+<div class="success">
+
+<h3>✅ Wizyta zarezerwowana!</h3>
+
+<p>
+<strong>Usługa:</strong>
+${wybranaUsluga}
+</p>
+
+<p>
+<strong>Termin:</strong>
+${wybranyTermin}
+</p>
+
+<p>
+<strong>Klient:</strong>
+${imie}
+</p>
+
+<p>
+<strong>Telefon:</strong>
+${telefon}
+</p>
+
+</div>
+
+`;
+
+}
 
 </script>
 
