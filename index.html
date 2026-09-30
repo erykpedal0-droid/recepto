@@ -76,7 +76,6 @@ Masaż
 Konsultacja
 </button>
 
-
 <div id="terminy" class="hidden">
 
 <h3>Wybierz termin:</h3>
@@ -98,7 +97,6 @@ Czwartek 12:00
 </button>
 
 </div>
-
 
 <div id="formularz" class="hidden">
 
@@ -122,11 +120,9 @@ Zarezerwuj wizytę
 
 </div>
 
-
 <div id="wynik"></div>
 
 </div>
-
 
 <script>
 
@@ -155,10 +151,10 @@ let wybranyTermin = "";
 
 function wybierzUsluge(usluga) {
 
-wybranaUsluga = usluga;
+  wybranaUsluga = usluga;
 
-document.getElementById("terminy")
-.classList.remove("hidden");
+  document.getElementById("terminy")
+    .classList.remove("hidden");
 
 }
 
@@ -169,10 +165,10 @@ document.getElementById("terminy")
 
 function wybierzTermin(termin) {
 
-wybranyTermin = termin;
+  wybranyTermin = termin;
 
-document.getElementById("formularz")
-.classList.remove("hidden");
+  document.getElementById("formularz")
+    .classList.remove("hidden");
 
 }
 
@@ -183,117 +179,127 @@ document.getElementById("formularz")
 
 async function zarezerwuj() {
 
-let imie =
-document.getElementById("imie").value;
+  let imie =
+    document.getElementById("imie").value.trim();
 
-let telefon =
-document.getElementById("telefon").value;
-
-
-if (imie === "" || telefon === "") {
-
-alert("Podaj imię i numer telefonu.");
-
-return;
-
-}
+  let telefon =
+    document.getElementById("telefon").value.trim();
 
 
-try {
+  if (imie === "" || telefon === "") {
 
-const response = await fetch(
+    alert("Podaj imię i numer telefonu.");
 
-SUPABASE_URL + "/rest/v1/appointments",
+    return;
 
-{
-
-method: "POST",
-
-headers: {
-
-"apikey": SUPABASE_KEY,
-
-"Authorization":
-"Bearer " + SUPABASE_KEY,
-
-"Content-Type":
-"application/json",
-
-"Prefer":
-"return=minimal"
-
-},
-
-body: JSON.stringify({
-
-service: wybranaUsluga,
-
-time: wybranyTermin,
-
-name: imie,
-
-phone: telefon
-
-})
-
-}
-
-);
+  }
 
 
+  try {
+
+    const response = await fetch(
+      SUPABASE_URL + "/rest/v1/appointments",
+      {
+        method: "POST",
+
+        headers: {
+          "apikey": SUPABASE_KEY,
+          "Authorization": "Bearer " + SUPABASE_KEY,
+          "Content-Type": "application/json",
+          "Prefer": "return=minimal"
+        },
+
+        body: JSON.stringify({
+          service: wybranaUsluga,
+          time: wybranyTermin,
+          name: imie,
+          phone: telefon
+        })
+      }
+    );
 
 
+    /* =========================
+       SPRAWDZENIE ODPOWIEDZI
+    ========================= */
 
-document.getElementById("wynik")
-.innerHTML = `
+    if (!response.ok) {
 
-<div class="success">
+      const errorText =
+        await response.text();
 
-<h3>✅ Wizyta zarezerwowana!</h3>
+      console.error(
+        "Supabase error:",
+        response.status,
+        errorText
+      );
 
-<p>
-<strong>Usługa:</strong>
-${wybranaUsluga}
-</p>
+      alert(
+        "Supabase zwrócił błąd: " +
+        response.status +
+        "\n" +
+        errorText
+      );
 
-<p>
-<strong>Termin:</strong>
-${wybranyTermin}
-</p>
+      return;
 
-<p>
-<strong>Klient:</strong>
-${imie}
-</p>
-
-<p>
-<strong>Telefon:</strong>
-${telefon}
-</p>
-
-<p>
-Rezerwacja została zapisana w bazie. 🎉
-</p>
-
-</div>
-
-`;
+    }
 
 
-document.getElementById("imie").value = "";
+    /* =========================
+       SUKCES
+    ========================= */
 
-document.getElementById("telefon").value = "";
+    document.getElementById("wynik")
+      .innerHTML = `
+
+      <div class="success">
+
+        <h3>✅ Wizyta zarezerwowana!</h3>
+
+        <p>
+          <strong>Usługa:</strong>
+          ${wybranaUsluga}
+        </p>
+
+        <p>
+          <strong>Termin:</strong>
+          ${wybranyTermin}
+        </p>
+
+        <p>
+          <strong>Klient:</strong>
+          ${imie}
+        </p>
+
+        <p>
+          <strong>Telefon:</strong>
+          ${telefon}
+        </p>
+
+        <p>
+          Rezerwacja została zapisana w bazie. 🎉
+        </p>
+
+      </div>
+
+      `;
 
 
-} catch (error) {
+    document.getElementById("imie").value = "";
 
-console.log(error);
+    document.getElementById("telefon").value = "";
 
-alert(
-"Błąd połączenia z bazą danych."
-);
 
-}
+  } catch (error) {
+
+    console.error(error);
+
+    alert(
+      "Błąd połączenia z bazą danych."
+    );
+
+  }
 
 }
 
