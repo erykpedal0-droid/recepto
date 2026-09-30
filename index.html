@@ -1,1133 +1,499 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recepto</title>
 
-<title>Recepto</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f7fb;
+      margin: 0;
+      padding: 20px;
+    }
 
-<style>
-* {
-    box-sizing: border-box;
-}
+    .container {
+      max-width: 700px;
+      margin: auto;
+    }
 
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #f5f7fb;
-    color: #111827;
-}
+    .box {
+      background: white;
+      padding: 25px;
+      border-radius: 16px;
+      margin-bottom: 20px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    }
 
-header {
-    background: white;
-    padding: 20px 8%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid #e5e7eb;
-}
+    h1, h2 {
+      margin-top: 0;
+    }
 
-.logo {
-    font-size: 24px;
-    font-weight: bold;
-}
+    button {
+      background: #2563eb;
+      color: white;
+      border: none;
+      padding: 12px 18px;
+      border-radius: 10px;
+      cursor: pointer;
+      margin: 5px;
+      font-size: 15px;
+    }
 
-.status {
-    color: #16a34a;
-    font-size: 14px;
-}
+    button:hover {
+      background: #1d4ed8;
+    }
 
-.container {
-    max-width: 850px;
-    margin: 40px auto;
-    padding: 20px;
-}
+    input {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 12px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 15px;
+    }
 
-h1 {
-    text-align: center;
-    font-size: 40px;
-    margin-bottom: 10px;
-}
+    .message {
+      background: #eef4ff;
+      padding: 15px;
+      border-radius: 10px;
+      margin: 15px 0;
+    }
 
-.subtitle {
-    text-align: center;
-    color: #6b7280;
-    margin-bottom: 30px;
-}
+    .appointment {
+      border: 1px solid #ddd;
+      padding: 15px;
+      border-radius: 10px;
+      margin: 10px 0;
+    }
 
-.chat {
-    background: white;
-    border-radius: 18px;
-    box-shadow: 0 10px 35px rgba(0,0,0,0.08);
-    overflow: hidden;
-}
+    .hidden {
+      display: none;
+    }
 
-.messages {
-    min-height: 420px;
-    padding: 25px;
-}
-
-.message {
-    max-width: 80%;
-    padding: 14px 17px;
-    border-radius: 15px;
-    margin-bottom: 15px;
-    line-height: 1.5;
-}
-
-.bot {
-    background: #f0f1ff;
-}
-
-.user {
-    background: #5b5ce2;
-    color: white;
-    margin-left: auto;
-}
-
-.options {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin: 10px 0 20px;
-}
-
-.option {
-    background: white;
-    border: 2px solid #5b5ce2;
-    color: #5b5ce2;
-    padding: 12px 18px;
-    border-radius: 10px;
-    cursor: pointer;
-    font-size: 15px;
-}
-
-.option:hover {
-    background: #5b5ce2;
-    color: white;
-}
-
-.input-area {
-    display: flex;
-    gap: 10px;
-    padding: 15px;
-    border-top: 1px solid #e5e7eb;
-}
-
-input {
-    flex: 1;
-    padding: 15px;
-    border: 1px solid #d1d5db;
-    border-radius: 12px;
-    font-size: 16px;
-}
-
-.send {
-    background: #5b5ce2;
-    color: white;
-    border: none;
-    padding: 0 25px;
-    border-radius: 12px;
-    cursor: pointer;
-}
-
-.confirmation {
-    background: #ecfdf5;
-    border: 1px solid #86efac;
-    padding: 20px;
-    border-radius: 14px;
-    margin-top: 15px;
-}
-
-.confirmation h3 {
-    color: #15803d;
-}
-
-.owner-link {
-    display: block;
-    width: 220px;
-    margin: 30px auto 0;
-    padding: 14px;
-    text-align: center;
-    background: #111827;
-    color: white;
-    text-decoration: none;
-    border-radius: 12px;
-}
-
-.panel {
-    display: none;
-}
-
-.panel-box {
-    background: white;
-    border-radius: 18px;
-    padding: 30px;
-    box-shadow: 0 10px 35px rgba(0,0,0,0.08);
-}
-
-.stats {
-    display: flex;
-    gap: 15px;
-    flex-wrap: wrap;
-    margin: 25px 0;
-}
-
-.stat {
-    flex: 1;
-    min-width: 180px;
-    background: #f5f7fb;
-    padding: 20px;
-    border-radius: 14px;
-}
-
-.stat-number {
-    font-size: 30px;
-    font-weight: bold;
-}
-
-.appointment {
-    border: 1px solid #e5e7eb;
-    padding: 18px;
-    border-radius: 12px;
-    margin-bottom: 12px;
-}
-
-.back {
-    display: inline-block;
-    margin-bottom: 20px;
-    cursor: pointer;
-    color: #5b5ce2;
-    font-weight: bold;
-}
-
-.empty {
-    padding: 20px;
-    background: #f5f7fb;
-    border-radius: 12px;
-    color: #6b7280;
-}
-
-.clear {
-    margin-top: 20px;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-}
-
-.error {
-    background: #fef2f2;
-    border: 1px solid #fecaca;
-    color: #991b1b;
-    padding: 15px;
-    border-radius: 12px;
-    margin-top: 15px;
-}
-</style>
+    .small {
+      color: #666;
+      font-size: 14px;
+    }
+  </style>
 </head>
 
 <body>
 
-<header>
-
-    <div class="logo">
-        Recepto
-    </div>
-
-    <div class="status">
-        ● Recepcjonista online
-    </div>
-
-</header>
-
 <div class="container">
 
-<!-- STRONA KLIENTA -->
+  <!-- PANEL KLIENTA -->
+  <div class="box" id="clientPanel">
 
-<div id="clientPage">
+    <h1>Porozmawiaj z Recepto</h1>
 
-    <h1>
-        Porozmawiaj z Recepto
-    </h1>
-
-    <p class="subtitle">
-        Umów wizytę w kilka sekund.
+    <p>
+      Twój cyfrowy recepcjonista jest dostępny 24/7.
     </p>
 
-    <div class="chat">
+    <div class="message">
+      Dzień dobry! 👋 Jestem Recepto.
+      Mogę pomóc Ci umówić wizytę.
+    </div>
 
-        <div
-            class="messages"
-            id="messages"
-        >
+    <h3>Wybierz usługę:</h3>
 
-            <div class="message bot">
+    <button onclick="chooseService('Fizjoterapia')">
+      Fizjoterapia
+    </button>
 
-                Dzień dobry! 👋
+    <button onclick="chooseService('Masaż')">
+      Masaż
+    </button>
 
-                <br><br>
+    <button onclick="chooseService('Konsultacja')">
+      Konsultacja
+    </button>
 
-                Jestem Recepto.
+    <div id="booking" class="hidden">
 
-                <br><br>
+      <h3>Wybierz termin:</h3>
 
-                Mogę pomóc Ci umówić wizytę.
-                Co chcesz zrobić?
+      <button onclick="chooseTime('Poniedziałek 14:00')">
+        Poniedziałek 14:00
+      </button>
 
-            </div>
+      <button onclick="chooseTime('Wtorek 10:30')">
+        Wtorek 10:30
+      </button>
 
-            <div class="options">
+      <button onclick="chooseTime('Środa 16:00')">
+        Środa 16:00
+      </button>
 
-                <button
-                    class="option"
-                    onclick="chooseService('Fizjoterapia')"
-                >
-                    Fizjoterapia
-                </button>
-
-                <button
-                    class="option"
-                    onclick="chooseService('Masaż')"
-                >
-                    Masaż
-                </button>
-
-                <button
-                    class="option"
-                    onclick="chooseService('Konsultacja')"
-                >
-                    Konsultacja
-                </button>
-
-            </div>
-
-        </div>
-
-        <div class="input-area">
-
-            <input
-                id="input"
-                placeholder="Napisz wiadomość..."
-            >
-
-            <button
-                class="send"
-                onclick="sendMessage()"
-            >
-                Wyślij
-            </button>
-
-        </div>
+      <button onclick="chooseTime('Czwartek 12:00')">
+        Czwartek 12:00
+      </button>
 
     </div>
 
-    <a
-        href="#"
-        class="owner-link"
-        onclick="showPanel(); return false;"
-    >
-        🔐 Panel właściciela
-    </a>
+    <div id="form" class="hidden">
 
-</div>
+      <h3>Podaj dane:</h3>
 
-<!-- PANEL WŁAŚCICIELA -->
+      <input
+        type="text"
+        id="name"
+        placeholder="Imię i nazwisko"
+      >
 
-<div
-    id="ownerPage"
-    class="panel"
->
+      <input
+        type="text"
+        id="phone"
+        placeholder="Numer telefonu"
+      >
 
-    <div class="panel-box">
-
-        <div
-            class="back"
-            onclick="showClient()"
-        >
-            ← Wróć do Recepto
-        </div>
-
-        <h1>
-            Panel właściciela
-        </h1>
-
-        <p class="subtitle">
-            Centrum zarządzania gabinetem
-        </p>
-
-        <div class="stats">
-
-            <div class="stat">
-
-                <div>
-                    Dzisiejsze wizyty
-                </div>
-
-                <div
-                    class="stat-number"
-                    id="appointmentCount"
-                >
-                    0
-                </div>
-
-            </div>
-
-            <div class="stat">
-
-                <div>
-                    Wszystkie rezerwacje
-                </div>
-
-                <div
-                    class="stat-number"
-                    id="totalCount"
-                >
-                    0
-                </div>
-
-            </div>
-
-            <div class="stat">
-
-                <div>
-                    Status
-                </div>
-
-                <div class="stat-number">
-                    🟢
-                </div>
-
-            </div>
-
-        </div>
-
-        <h2>
-            Rezerwacje
-        </h2>
-
-        <div id="appointments"></div>
-
-        <button
-            class="clear"
-            onclick="clearAppointments()"
-        >
-            Wyczyść testowe rezerwacje
-        </button>
+      <button onclick="makeAppointment()">
+        Potwierdź wizytę
+      </button>
 
     </div>
 
-</div>
+    <div id="confirmation" class="hidden"></div>
+
+  </div>
+
+
+  <!-- PANEL WŁAŚCICIELA -->
+
+  <div class="box">
+
+    <button onclick="showOwnerPanel()">
+      🔐 Panel właściciela
+    </button>
+
+  </div>
+
+
+  <div class="box hidden" id="ownerPanel">
+
+    <h2>Panel właściciela</h2>
+
+    <p>
+      <strong>Dzisiejsze wizyty:</strong>
+      <span id="todayCount">0</span>
+    </p>
+
+    <p>
+      <strong>Wszystkie rezerwacje:</strong>
+      <span id="allCount">0</span>
+    </p>
+
+    <h3>Rezerwacje</h3>
+
+    <div id="appointments">
+      Ładowanie...
+    </div>
+
+  </div>
 
 </div>
+
 
 <script>
 
-/* ================================
-   USTAWIENIA SUPABASE
-================================ */
+/* =========================
+   SUPABASE
+========================= */
 
 const SUPABASE_URL =
-    "https://pgzsgqjdrgckaghcgrsz.supabase.co";
+  "https://pgzsgqjdrgckaghcgrsz.supabase.co";
+
 
 const SUPABASE_KEY =
-    "WKLEJ_TUTAJ_SWÓJ_PUBLISHABLE_KEY";
+  "WKLEJ_TUTAJ_SWÓJ_PUBLISHABLE_KEY";
 
+
+/* =========================
+   ZMIENNE
+========================= */
 
 let selectedService = "";
 let selectedTime = "";
-let step = "service";
 
 
-/* ================================
-   POŁĄCZENIE Z SUPABASE
-================================ */
+/* =========================
+   WYBÓR USŁUGI
+========================= */
 
-async function supabaseRequest(
-    method,
-    body = null
-) {
+function chooseService(service) {
 
-    const options = {
+  selectedService = service;
 
-        method: method,
+  document.getElementById("booking")
+    .classList.remove("hidden");
+
+  document.getElementById("form")
+    .classList.add("hidden");
+
+  document.getElementById("confirmation")
+    .classList.add("hidden");
+}
+
+
+/* =========================
+   WYBÓR TERMINU
+========================= */
+
+function chooseTime(time) {
+
+  selectedTime = time;
+
+  document.getElementById("form")
+    .classList.remove("hidden");
+}
+
+
+/* =========================
+   ZAPIS DO SUPABASE
+========================= */
+
+async function makeAppointment() {
+
+  const name =
+    document.getElementById("name").value.trim();
+
+  const phone =
+    document.getElementById("phone").value.trim();
+
+
+  if (!name || !phone) {
+
+    alert("Podaj imię i numer telefonu.");
+
+    return;
+  }
+
+
+  try {
+
+    const response = await fetch(
+      SUPABASE_URL + "/rest/v1/appointments",
+      {
+        method: "POST",
 
         headers: {
+          "apikey": SUPABASE_KEY,
+          "Authorization": "Bearer " + SUPABASE_KEY,
+          "Content-Type": "application/json",
+          "Prefer": "return=minimal"
+        },
 
-            "apikey": SUPABASE_KEY,
-
-            "Authorization":
-                "Bearer " + SUPABASE_KEY,
-
-            "Content-Type":
-                "application/json",
-
-            "Prefer":
-                "return=representation"
-
-        }
-
-    };
-
-
-    if (body !== null) {
-
-        options.body =
-            JSON.stringify(body);
-
-    }
-
-
-    const response =
-        await fetch(
-            SUPABASE_URL +
-            "/rest/v1/appointments",
-            options
-        );
+        body: JSON.stringify({
+          service: selectedService,
+          time: selectedTime,
+          name: name,
+          phone: phone
+        })
+      }
+    );
 
 
     if (!response.ok) {
 
-        const errorText =
-            await response.text();
+      const errorText = await response.text();
 
-        throw new Error(
-            errorText
-        );
+      console.error(errorText);
 
+      alert(
+        "Nie udało się zapisać rezerwacji. Sprawdź klucz Supabase i ustawienia tabeli."
+      );
+
+      return;
     }
 
 
-    return response.json();
+    document.getElementById("confirmation").innerHTML = `
 
-}
+      <div class="message">
 
-
-/* ================================
-   WIADOMOŚCI
-================================ */
-
-function addMessage(
-    text,
-    type
-) {
-
-    const messages =
-        document.getElementById(
-            "messages"
-        );
-
-    const message =
-        document.createElement(
-            "div"
-        );
-
-    message.className =
-        "message " + type;
-
-    message.innerText =
-        text;
-
-    messages.appendChild(
-        message
-    );
-
-    messages.scrollTop =
-        messages.scrollHeight;
-
-}
-
-
-/* ================================
-   WYBÓR USŁUGI
-================================ */
-
-function chooseService(
-    service
-) {
-
-    selectedService =
-        service;
-
-    addMessage(
-        service,
-        "user"
-    );
-
-
-    setTimeout(
-        function() {
-
-            addMessage(
-                "Świetnie! 😊 Wybierz dogodny termin:",
-                "bot"
-            );
-
-            showTimes();
-
-        },
-        400
-    );
-
-}
-
-
-/* ================================
-   TERMINY
-================================ */
-
-function showTimes() {
-
-    const messages =
-        document.getElementById(
-            "messages"
-        );
-
-    const options =
-        document.createElement(
-            "div"
-        );
-
-    options.className =
-        "options";
-
-
-    const times = [
-
-        "Poniedziałek 14:00",
-
-        "Wtorek 10:30",
-
-        "Środa 16:00",
-
-        "Czwartek 12:00"
-
-    ];
-
-
-    times.forEach(
-        function(time) {
-
-            const button =
-                document.createElement(
-                    "button"
-                );
-
-            button.className =
-                "option";
-
-            button.innerText =
-                time;
-
-            button.onclick =
-                function() {
-
-                    chooseTime(
-                        time
-                    );
-
-                };
-
-
-            options.appendChild(
-                button
-            );
-
-        }
-    );
-
-
-    messages.appendChild(
-        options
-    );
-
-}
-
-
-/* ================================
-   WYBÓR TERMINU
-================================ */
-
-function chooseTime(
-    time
-) {
-
-    selectedTime =
-        time;
-
-    addMessage(
-        time,
-        "user"
-    );
-
-
-    setTimeout(
-        function() {
-
-            addMessage(
-                "Super! 👍 Podaj proszę swoje imię.",
-                "bot"
-            );
-
-            step = "name";
-
-        },
-        400
-    );
-
-}
-
-
-/* ================================
-   WYSYŁANIE WIADOMOŚCI
-================================ */
-
-function sendMessage() {
-
-    const input =
-        document.getElementById(
-            "input"
-        );
-
-    const text =
-        input.value.trim();
-
-
-    if (!text) return;
-
-
-    addMessage(
-        text,
-        "user"
-    );
-
-
-    input.value = "";
-
-
-    if (step === "name") {
-
-        window.userName =
-            text;
-
-        addMessage(
-            "Dzięki! Teraz podaj numer telefonu.",
-            "bot"
-        );
-
-        step = "phone";
-
-        return;
-
-    }
-
-
-    if (step === "phone") {
-
-        window.userPhone =
-            text;
-
-        saveAppointment();
-
-        return;
-
-    }
-
-
-    addMessage(
-        "Wybierz proszę jedną z dostępnych usług.",
-        "bot"
-    );
-
-}
-
-
-/* ================================
-   ZAPIS REZERWACJI
-================================ */
-
-async function saveAppointment() {
-
-    try {
-
-        await supabaseRequest(
-            "POST",
-            {
-
-                service:
-                    selectedService,
-
-                time:
-                    selectedTime,
-
-                name:
-                    window.userName,
-
-                phone:
-                    window.userPhone
-
-            }
-        );
-
-
-        showConfirmation();
-
-
-    } catch (error) {
-
-        console.error(
-            error
-        );
-
-        showError(
-            "Nie udało się zapisać rezerwacji. Sprawdź ustawienia Supabase."
-        );
-
-    }
-
-}
-
-
-/* ================================
-   POTWIERDZENIE
-================================ */
-
-function showConfirmation() {
-
-    const messages =
-        document.getElementById(
-            "messages"
-        );
-
-    const box =
-        document.createElement(
-            "div"
-        );
-
-    box.className =
-        "confirmation";
-
-
-    box.innerHTML = `
-
-        <h3>
-            ✅ Wizyta zarezerwowana!
-        </h3>
+        <h3>✅ Wizyta zarezerwowana!</h3>
 
         <p>
-            <strong>Usługa:</strong>
-            ${selectedService}
+          <strong>Usługa:</strong>
+          ${selectedService}
         </p>
 
         <p>
-            <strong>Termin:</strong>
-            ${selectedTime}
+          <strong>Termin:</strong>
+          ${selectedTime}
         </p>
 
         <p>
-            <strong>Imię:</strong>
-            ${window.userName}
+          <strong>Imię:</strong>
+          ${name}
         </p>
 
         <p>
-            <strong>Telefon:</strong>
-            ${window.userPhone}
+          <strong>Telefon:</strong>
+          ${phone}
         </p>
 
-        <br>
-
-        <p>
-            Rezerwacja została zapisana w bazie Recepto.
+        <p class="small">
+          Rezerwacja została zapisana w bazie Recepto.
         </p>
+
+      </div>
 
     `;
 
 
-    messages.appendChild(
-        box
+    document.getElementById("confirmation")
+      .classList.remove("hidden");
+
+
+    document.getElementById("form")
+      .classList.add("hidden");
+
+
+    document.getElementById("booking")
+      .classList.add("hidden");
+
+
+    document.getElementById("name").value = "";
+
+    document.getElementById("phone").value = "";
+
+
+  } catch (error) {
+
+    console.error(error);
+
+    alert(
+      "Wystąpił błąd połączenia z bazą danych."
     );
-
-    messages.scrollTop =
-        messages.scrollHeight;
-
+  }
 }
 
 
-function showError(
-    text
-) {
-
-    const messages =
-        document.getElementById(
-            "messages"
-        );
-
-    const box =
-        document.createElement(
-            "div"
-        );
-
-    box.className =
-        "error";
-
-    box.innerText =
-        text;
-
-    messages.appendChild(
-        box
-    );
-
-}
-
-
-/* ================================
+/* =========================
    PANEL WŁAŚCICIELA
-================================ */
+========================= */
 
-function showPanel() {
+function showOwnerPanel() {
 
-    document.getElementById(
-        "clientPage"
-    ).style.display =
-        "none";
+  document.getElementById("ownerPanel")
+    .classList.remove("hidden");
 
-
-    document.getElementById(
-        "ownerPage"
-    ).style.display =
-        "block";
-
-
-    renderAppointments();
+  loadAppointments();
 
 }
 
 
-function showClient() {
-
-    document.getElementById(
-        "ownerPage"
-    ).style.display =
-        "none";
-
-
-    document.getElementById(
-        "clientPage"
-    ).style.display =
-        "block";
-
-}
-
-
-/* ================================
+/* =========================
    POBIERANIE REZERWACJI
-================================ */
+========================= */
 
-async function renderAppointments() {
+async function loadAppointments() {
 
-    const container =
-        document.getElementById(
-            "appointments"
-        );
+  const container =
+    document.getElementById("appointments");
 
-    const count =
-        document.getElementById(
-            "appointmentCount"
-        );
 
-    const total =
-        document.getElementById(
-            "totalCount"
-        );
+  container.innerHTML =
+    "Ładowanie rezerwacji...";
 
+
+  try {
+
+    const response = await fetch(
+      SUPABASE_URL +
+      "/rest/v1/appointments?select=*&order=created_at.desc",
+      {
+        method: "GET",
+
+        headers: {
+          "apikey": SUPABASE_KEY,
+          "Authorization": "Bearer " + SUPABASE_KEY
+        }
+      }
+    );
+
+
+    if (!response.ok) {
+
+      const errorText = await response.text();
+
+      console.error(errorText);
+
+      container.innerHTML =
+        "<p>Nie udało się pobrać rezerwacji.</p>";
+
+      return;
+    }
+
+
+    const appointments =
+      await response.json();
+
+
+    document.getElementById("allCount")
+      .textContent = appointments.length;
+
+
+    document.getElementById("todayCount")
+      .textContent = appointments.length;
+
+
+    if (appointments.length === 0) {
+
+      container.innerHTML =
+        "<p>Brak rezerwacji.</p>";
+
+      return;
+    }
+
+
+    container.innerHTML = "";
+
+
+    appointments.forEach(function(appointment) {
+
+      const div =
+        document.createElement("div");
+
+      div.className =
+        "appointment";
+
+
+      div.innerHTML = `
+
+        <strong>${appointment.time}</strong>
+
+        <br>
+
+        ${appointment.name}
+
+        <br>
+
+        ${appointment.service}
+
+        <br>
+
+        📞 ${appointment.phone}
+
+      `;
+
+
+      container.appendChild(div);
+
+    });
+
+
+  } catch (error) {
+
+    console.error(error);
 
     container.innerHTML =
-        "Ładowanie rezerwacji...";
-
-
-    try {
-
-        const appointments =
-            await supabaseRequest(
-                "GET"
-            );
-
-
-        count.innerText =
-            appointments.length;
-
-
-        total.innerText =
-            appointments.length;
-
-
-        container.innerHTML =
-            "";
-
-
-        if (
-            appointments.length === 0
-        ) {
-
-            container.innerHTML = `
-
-                <div class="empty">
-
-                    Brak rezerwacji.
-
-                    <br><br>
-
-                    Gdy klient umówi wizytę,
-                    pojawi się tutaj.
-
-                </div>
-
-            `;
-
-            return;
-
-        }
-
-
-        appointments
-            .slice()
-            .reverse()
-            .forEach(
-                function(
-                    appointment
-                ) {
-
-                    const item =
-                        document.createElement(
-                            "div"
-                        );
-
-                    item.className =
-                        "appointment";
-
-
-                    item.innerHTML = `
-
-                        <strong>
-                            ${appointment.time} — ${appointment.name}
-                        </strong>
-
-                        <br>
-
-                        ${appointment.service}
-
-                        <br>
-
-                        📞 ${appointment.phone}
-
-                    `;
-
-
-                    container.appendChild(
-                        item
-                    );
-
-                }
-            );
-
-
-    } catch (error) {
-
-        console.error(
-            error
-        );
-
-
-        container.innerHTML = `
-
-            <div class="error">
-
-                Nie udało się pobrać rezerwacji.
-
-                <br><br>
-
-                Sprawdź ustawienia Supabase.
-
-            </div>
-
-        `;
-
-    }
-
-}
-
-
-/* ================================
-   USUWANIE REZERWACJI TESTOWYCH
-================================ */
-
-async function clearAppointments() {
-
-    if (
-        !confirm(
-            "Czy na pewno chcesz usunąć wszystkie rezerwacje?"
-        )
-    ) {
-
-        return;
-
-    }
-
-
-    try {
-
-        const appointments =
-            await supabaseRequest(
-                "GET"
-            );
-
-
-        for (
-            const appointment
-            of appointments
-        ) {
-
-            await fetch(
-                SUPABASE_URL +
-                "/rest/v1/appointments?id=eq." +
-                appointment.id,
-                {
-
-                    method:
-                        "DELETE",
-
-                    headers: {
-
-                        "apikey":
-                            SUPABASE_KEY,
-
-                        "Authorization":
-                            "Bearer " +
-                            SUPABASE_KEY
-
-                    }
-
-                }
-            );
-
-        }
-
-
-        renderAppointments();
-
-
-    } catch (error) {
-
-        console.error(
-            error
-        );
-
-        alert(
-            "Nie udało się wyczyścić rezerwacji."
-        );
-
-    }
-
+      "<p>Wystąpił błąd podczas pobierania danych.</p>";
+  }
 }
 
 </script>
