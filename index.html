@@ -41,10 +41,6 @@
       font-size: 15px;
     }
 
-    button:hover {
-      background: #1d4ed8;
-    }
-
     input {
       width: 100%;
       box-sizing: border-box;
@@ -84,8 +80,7 @@
 
 <div class="container">
 
-  <!-- PANEL KLIENTA -->
-  <div class="box" id="clientPanel">
+  <div class="box">
 
     <h1>Porozmawiaj z Recepto</h1>
 
@@ -161,8 +156,6 @@
   </div>
 
 
-  <!-- PANEL WŁAŚCICIELA -->
-
   <div class="box">
 
     <button onclick="showOwnerPanel()">
@@ -175,11 +168,6 @@
   <div class="box hidden" id="ownerPanel">
 
     <h2>Panel właściciela</h2>
-
-    <p>
-      <strong>Dzisiejsze wizyty:</strong>
-      <span id="todayCount">0</span>
-    </p>
 
     <p>
       <strong>Wszystkie rezerwacje:</strong>
@@ -199,29 +187,22 @@
 
 <script>
 
-/* =========================
-   SUPABASE
-========================= */
+/* ===== SUPABASE ===== */
 
 const SUPABASE_URL =
   "https://pgzsgqjdrgckaghcgrsz.supabase.co";
 
-
 const SUPABASE_KEY =
-  "WKLEJ_TUTAJ_SWÓJ_PUBLISHABLE_KEY";
+ sb_publishable_B4AXgaTQmPAWhiewi2Ukwg_BzbdxgMs
 
 
-/* =========================
-   ZMIENNE
-========================= */
+/* ===== ZMIENNE ===== */
 
 let selectedService = "";
 let selectedTime = "";
 
 
-/* =========================
-   WYBÓR USŁUGI
-========================= */
+/* ===== WYBÓR USŁUGI ===== */
 
 function chooseService(service) {
 
@@ -229,18 +210,10 @@ function chooseService(service) {
 
   document.getElementById("booking")
     .classList.remove("hidden");
-
-  document.getElementById("form")
-    .classList.add("hidden");
-
-  document.getElementById("confirmation")
-    .classList.add("hidden");
 }
 
 
-/* =========================
-   WYBÓR TERMINU
-========================= */
+/* ===== WYBÓR TERMINU ===== */
 
 function chooseTime(time) {
 
@@ -251,9 +224,7 @@ function chooseTime(time) {
 }
 
 
-/* =========================
-   ZAPIS DO SUPABASE
-========================= */
+/* ===== ZAPIS REZERWACJI ===== */
 
 async function makeAppointment() {
 
@@ -298,12 +269,10 @@ async function makeAppointment() {
 
     if (!response.ok) {
 
-      const errorText = await response.text();
-
-      console.error(errorText);
+      console.error(await response.text());
 
       alert(
-        "Nie udało się zapisać rezerwacji. Sprawdź klucz Supabase i ustawienia tabeli."
+        "Nie udało się zapisać rezerwacji."
       );
 
       return;
@@ -336,10 +305,6 @@ async function makeAppointment() {
           ${phone}
         </p>
 
-        <p class="small">
-          Rezerwacja została zapisana w bazie Recepto.
-        </p>
-
       </div>
 
     `;
@@ -348,14 +313,11 @@ async function makeAppointment() {
     document.getElementById("confirmation")
       .classList.remove("hidden");
 
-
     document.getElementById("form")
       .classList.add("hidden");
 
-
     document.getElementById("booking")
       .classList.add("hidden");
-
 
     document.getElementById("name").value = "";
 
@@ -367,15 +329,13 @@ async function makeAppointment() {
     console.error(error);
 
     alert(
-      "Wystąpił błąd połączenia z bazą danych."
+      "Wystąpił błąd połączenia z bazą."
     );
   }
 }
 
 
-/* =========================
-   PANEL WŁAŚCICIELA
-========================= */
+/* ===== PANEL WŁAŚCICIELA ===== */
 
 function showOwnerPanel() {
 
@@ -383,19 +343,15 @@ function showOwnerPanel() {
     .classList.remove("hidden");
 
   loadAppointments();
-
 }
 
 
-/* =========================
-   POBIERANIE REZERWACJI
-========================= */
+/* ===== POBIERANIE REZERWACJI ===== */
 
 async function loadAppointments() {
 
   const container =
     document.getElementById("appointments");
-
 
   container.innerHTML =
     "Ładowanie rezerwacji...";
@@ -419,9 +375,7 @@ async function loadAppointments() {
 
     if (!response.ok) {
 
-      const errorText = await response.text();
-
-      console.error(errorText);
+      console.error(await response.text());
 
       container.innerHTML =
         "<p>Nie udało się pobrać rezerwacji.</p>";
@@ -435,10 +389,6 @@ async function loadAppointments() {
 
 
     document.getElementById("allCount")
-      .textContent = appointments.length;
-
-
-    document.getElementById("todayCount")
       .textContent = appointments.length;
 
 
